@@ -1,1 +1,1 @@
-web: pip install -r requirements.txt && uvicorn app:app --reload --port 8000
+web: uvicorn app:app --reload --port 8000
