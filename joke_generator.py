@@ -2,7 +2,7 @@ import requests
 
 class JokeGenerator:
     def __init__(self):
-        self.api_url = "https://v2.jokeapi.dev/joke/Dad?type=single"
+        self.api_url = "https://v2.jokeapi.dev/joke/Any"
 
     def get_joke(self):
         try:
