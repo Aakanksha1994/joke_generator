@@ -1,5 +1,4 @@
 import requests
-import json
 from typing import Optional
 
 class JokeGenerator:
@@ -26,16 +25,3 @@ class JokeGenerator:
         except Exception as e:
             print(f"Error fetching joke: {e}")
             return None
-
-def main():
-    generator = JokeGenerator()
-    while True:
-        input("\nPress Enter to get a new joke (or Ctrl+C to quit)...")
-        joke = generator.get_joke()
-        if joke:
-            print("\n" + joke)
-        else:
-            print("Failed to fetch a joke. Please try again.")
-
-if __name__ == "__main__":
-    main() 

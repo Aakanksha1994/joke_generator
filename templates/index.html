@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .joke-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        .joke-text {
+            font-size: 1.5rem;
+            min-height: 100px;
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            white-space: pre-line;
+        }
+        .btn-primary {
+            background-color: #6c63ff;
+            border-color: #6c63ff;
+            padding: 0.5rem 2rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #5a52d5;
+            border-color: #5a52d5;
+            transform: translateY(-2px);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="joke-container">
+            <h1 class="text-center">Random Joke Generator</h1>
+            <p class="text-center mb-4">Click the button below to get a random joke!</p>
+            
+            <div class="joke-text mb-4" id="jokeText">
+                Your joke will appear here...
+            </div>
+            
+            <div class="loading" id="loadingIndicator">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="btn btn-primary" id="getJokeBtn">Get a Joke</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Powered by JokeAPI | Created with FastAPI</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const jokeText = document.getElementById('jokeText');
+            const getJokeBtn = document.getElementById('getJokeBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            
+            getJokeBtn.addEventListener('click', fetchJoke);
+            
+            // Fetch a joke when the page loads
+            fetchJoke();
+            
+            function fetchJoke() {
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                jokeText.textContent = '';
+                
+                fetch('/api/joke')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Hide loading indicator
+                        loadingIndicator.style.display = 'none';
+                        
+                        // Display the joke
+                        jokeText.textContent = data.joke;
+                        
+                        // Add animation
+                        jokeText.classList.add('fade-in');
+                        setTimeout(() => {
+                            jokeText.classList.remove('fade-in');
+                        }, 500);
+                    })
+                    .catch(error => {
+                        // Hide loading indicator
+                        loadingIndicator.style.display = 'none';
+                        
+                        // Display error message
+                        jokeText.textContent = 'Failed to fetch joke. Please try again.';
+                        console.error('Error fetching joke:', error);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
