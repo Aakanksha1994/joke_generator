@@ -1,27 +1,16 @@
 import requests
-from typing import Optional
 
 class JokeGenerator:
     def __init__(self):
-        self.used_jokes = set()
-        self.api_url = "https://v2.jokeapi.dev/joke/Any"
+        self.api_url = "https://v2.jokeapi.dev/joke/Dad?type=single"
 
-    def get_joke(self) -> Optional[str]:
+    def get_joke(self):
         try:
             response = requests.get(self.api_url)
-            data = response.json()
-            
-            if data["type"] == "single":
-                joke = data["joke"]
-            else:
-                joke = f"{data['setup']}\n{data['delivery']}"
-            
-            if joke not in self.used_jokes:
-                self.used_jokes.add(joke)
-                return joke
-            else:
-                return self.get_joke()  # Try again if joke was already used
-                
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("joke", "No joke found")
+            return None
         except Exception as e:
             print(f"Error fetching joke: {e}")
             return None
